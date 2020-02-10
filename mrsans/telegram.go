@@ -2,32 +2,47 @@ package main
 
 import (
 	"github.com/go-telegram-bot-api/telegram-bot-api"
+	log "github.com/sirupsen/logrus"
 )
-func SensePushMessage() {
-	bot, err := tgbotapi.NewBotAPI("MyAwesomeBotToken")
+
+func InitializeTelegramBot() {
+	bot, err := tgbotapi.NewBotAPI(Config.telegram_bot_token)
 	if err != nil {
-		log.Panic(err)
+		log.Fatal("failed to initialize bot API", err)
+	}
+	log.Infof("authorized as account %s", bot.Self.UserName)
+}
+
+func SensePushMessage(caption string, photo string) {
+	bot, err := tgbotapi.NewBotAPI(Config.telegram_bot_token)
+	if err != nil {
+		log.Fatal("failed to initialize bot API", err)
 	}
 
-	bot.Debug = true
+	msg := tgbotapi.NewPhotoUpload(Config.telegram_chat_id, photo)
+	msg.Caption = caption
+	msg.ParseMode = "markdown"
 
-	log.Printf("Authorized on account %s", bot.Self.UserName)
+	_, err = bot.Send(msg)
 
-	u := tgbotapi.NewUpdate(0)
-	u.Timeout = 60
 
-	updates, err := bot.GetUpdatesChan(u)
+	if err != nil {
+		log.Warn("failed to send message", err)
+	}
+}
 
-	for update := range updates {
-		if update.Message == nil { // ignore any non-Message Updates
-			continue
-		}
+func SensePushLog(message string) {
+	bot, err := tgbotapi.NewBotAPI(Config.telegram_bot_token)
+	if err != nil {
+		log.Fatal("failed to initialize bot API", err)
+	}
 
-		log.Printf("[%s] %s", update.Message.From.UserName, update.Message.Text)
+	msg := tgbotapi.NewMessage(Config.telegram_log_chat_id, message)
 
-		msg := tgbotapi.NewMessage(update.Message.Chat.ID, update.Message.Text)
-		msg.ReplyToMessageID = update.Message.MessageID
+	_, err = bot.Send(msg)
 
-		bot.Send(msg)
+
+	if err != nil {
+		log.Warn("failed to send message", err)
 	}
 }

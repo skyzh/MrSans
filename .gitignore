@@ -26,5 +26,6 @@
 
 .idea/
 
-out.png
 config.toml
+
+out/

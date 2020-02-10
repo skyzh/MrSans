@@ -88,6 +88,14 @@
   version = "v0.9.1"
 
 [[projects]]
+  digest = "1:32db15a47b5be06a5d40e863ab0ebed107741845fd2d8676121f788284d26923"
+  name = "github.com/robfig/cron"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "ccba498c397bb90a9c84945bbb0f7af2d72b6309"
+  version = "v3.0.1"
+
+[[projects]]
   digest = "1:04457f9f6f3ffc5fea48e71d62f2ca256637dee0a04d710288e27e05c8b41976"
   name = "github.com/sirupsen/logrus"
   packages = ["."]
@@ -136,6 +144,7 @@
     "github.com/prometheus/client_golang/api",
     "github.com/prometheus/client_golang/api/prometheus/v1",
     "github.com/prometheus/common/model",
+    "github.com/robfig/cron",
     "github.com/sirupsen/logrus",
   ]
   solver-name = "gps-cdcl"

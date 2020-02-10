@@ -12,7 +12,7 @@ import (
 const PLOT_WIDTH = 2048
 const PLOT_HEIGHT = 2048
 const CONTENT_HEIGHT_PERCENT = 0.8
-const CONTENT_WIDTH_PERCENT = 0.9
+const CONTENT_WIDTH_PERCENT = 0.85
 const PLOT_FILL_COLOR = "2196F3"
 
 func PositionSeries(id int, total int, height float64) float64 {
@@ -150,11 +150,11 @@ func Plot(temp *[]model.SamplePair, hum *[]model.SamplePair, pa *[]model.SampleP
 	ctx.SetRGB(0, 0, 0)
 	x_offset := PositionXOffset(float64(ctx.Width()))
 	x_offset_right := float64(ctx.Width()) - PositionXOffset(float64(ctx.Width()))
-	if err := ctx.LoadFontFace("/Library/Fonts/Arial Unicode.ttf", 30); err != nil {
+	if err := ctx.LoadFontFace("/Library/Fonts/Arial Unicode.ttf", 40); err != nil {
 		log.Fatal("failed to load font face: ", err)
 	}
 	ctx.DrawString(fmt.Sprintf("Mr. Sans reporting at %s", time.Now().Format("Mon Jan 2 15:04:05 MST 2006")), x_offset, PositionSeries(0, plot_total, PLOT_HEIGHT)-30)
-	if err := ctx.LoadFontFace("/Library/Fonts/Arial Unicode.ttf", 20); err != nil {
+	if err := ctx.LoadFontFace("/Library/Fonts/Arial Unicode.ttf", 30); err != nil {
 		log.Fatal("failed to load font face: ", err)
 	}
 	ctx.DrawString("Temperature", x_offset, PositionSeries(0, plot_total, PLOT_HEIGHT))
@@ -176,5 +176,5 @@ func Plot(temp *[]model.SamplePair, hum *[]model.SamplePair, pa *[]model.SampleP
 	PlotSeries(pm25, ctx, PositionSeries(3, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
 	PlotSeries(pm10, ctx, PositionSeries(4, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
 
-	ctx.SavePNG("filename")
+	ctx.SavePNG(filename)
 }
