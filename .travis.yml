@@ -1,5 +1,5 @@
-language: bionic
-dist: xenial
+language: go
+dist: bionic
 before_install:
   - curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 install:
