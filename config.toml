@@ -1,0 +1,4 @@
+[mrsans]
+bluesense_url="http://alexchi-raspi.local:9090/"
+prometheus_url="http://alexchi-raspi.local:9090/"
+bluesense_job="bluesense_shanghai_changning"
