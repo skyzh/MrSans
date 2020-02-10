@@ -166,8 +166,8 @@ func Plot(temp *[]model.SamplePair, hum *[]model.SamplePair, pa *[]model.SampleP
 	start_time := (*temp)[0].Timestamp
 	end_time := (*temp)[len(*temp)-1].Timestamp
 
-	ctx.DrawStringAnchored(start_time.Time().Format("15:04"), x_offset, PLOT_HEIGHT-60, 0, 1)
-	ctx.DrawStringAnchored(end_time.Time().Format("15:04"), x_offset_right, PLOT_HEIGHT-60, 1, 1)
+	ctx.DrawStringAnchored(start_time.Time().Format("Mon Jan 2 15:04"), x_offset, PLOT_HEIGHT-60, 0, 1)
+	ctx.DrawStringAnchored(end_time.Time().Format("Mon Jan 2 15:04"), x_offset_right, PLOT_HEIGHT-60, 1, 1)
 
 	// Plot Series
 	PlotSeries(temp, ctx, PositionSeries(0, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
