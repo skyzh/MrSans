@@ -140,7 +140,7 @@ func PlotSeries(series *[]model.SamplePair, ctx *gg.Context, y float64, height f
 	}
 }
 
-func Plot(temp *[]model.SamplePair, hum *[]model.SamplePair, pa *[]model.SamplePair, pm25 *[]model.SamplePair, pm10 *[]model.SamplePair) {
+func Plot(temp *[]model.SamplePair, hum *[]model.SamplePair, pa *[]model.SamplePair, pm25 *[]model.SamplePair, pm10 *[]model.SamplePair, filename string) {
 	plot_total := 5
 	ctx := gg.NewContext(PLOT_WIDTH, PLOT_HEIGHT)
 	ctx.SetHexColor("ffffff")
@@ -176,5 +176,5 @@ func Plot(temp *[]model.SamplePair, hum *[]model.SamplePair, pa *[]model.SampleP
 	PlotSeries(pm25, ctx, PositionSeries(3, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
 	PlotSeries(pm10, ctx, PositionSeries(4, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
 
-	ctx.SavePNG("out.png")
+	ctx.SavePNG("filename")
 }

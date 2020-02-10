@@ -3,5 +3,5 @@ bluesense_url="http://alexchi-raspi.local:9090/"
 prometheus_url="http://alexchi-raspi.local:9090/"
 bluesense_job="bluesense_shanghai_changning"
 telegram_bot_token="test"
-chat_id="23333333"
+telegram_chat_id="23333333"
 
