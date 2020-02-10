@@ -5,3 +5,4 @@ bluesense_job="bluesense_shanghai_changning"
 telegram_bot_token="test"
 telegram_chat_id=23333333
 telegram_log_chat_id=233333333
+plot_fontface="/Library/Fonts/Arial Unicode.ttf"
