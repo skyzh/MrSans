@@ -7,7 +7,6 @@ import (
 	"github.com/prometheus/client_golang/api/prometheus/v1"
 	"github.com/prometheus/common/model"
 	log "github.com/sirupsen/logrus"
-	"time"
 )
 
 func GetSenseClient() v1.API {
@@ -47,19 +46,23 @@ func QueryPM25() string {
 }
 
 
-func GetData(ctx context.Context) {
+func GetData(query string, r v1.Range, ctx context.Context) [] model.SamplePair {
 	v1api := GetSenseClient()
 
-	result, warnings, err := v1api.Query(ctx, QueryTemperature(), time.Now())
+	result, warnings, err := v1api.QueryRange(ctx, query, r)
 	if err != nil {
 		log.Fatal("failed to query data: ", err)
 	}
 	if warnings != nil {
 		log.Warn("query warning: ", warnings)
 	}
-	if result, ok := result.(model.Vector); ok {
-		for _, x := range result {
-			log.Info(x.Value)
-		}
+	mat, ok := result.(model.Matrix)
+	if !ok {
+		log.Fatal("failed to cast data")
 	}
+	if mat.Len() != 1 {
+		log.Fatal("more than 1 query result")
+	}
+	values := mat[0].Values
+	return values
 }
