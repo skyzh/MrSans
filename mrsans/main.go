@@ -70,7 +70,7 @@ func ReportOnce() {
 func RunCronTask() {
 	log.Info("Scheduler running")
 	c := cron.New()
-	c.AddFunc("@every 1m", func() { ReportOnce() })
+	c.AddFunc(Config.cron_job, func() { ReportOnce() })
 	log.Info(c.Entries())
 	c.Run()
 }
