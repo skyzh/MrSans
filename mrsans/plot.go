@@ -30,16 +30,28 @@ func HeightSeries(total int, height float64) float64 {
 }
 
 func RangeOfSeries(series *[]model.SamplePair) (float64, float64) {
-	min := float64((*series)[0].Value)
-	max := min
+	first := true
+	min := 0.0
+	max := 1.0
 	for _, data := range *series {
-		min = math.Min(min, float64(data.Value))
-		max = math.Max(max, float64(data.Value))
+		val := float64(data.Value)
+		if !math.IsNaN(val) {
+			if first {
+				min = val
+				max = val
+				first = false
+			}
+			min = math.Min(min, val)
+			max = math.Max(max, val)
+		}
 	}
 	return min, max
 }
 
 func PercentageOf(data float64, min float64, max float64, margin float64) float64 {
+	if math.IsNaN(data) {
+		return 0
+	}
 	margin = (max - min) * margin
 	max += margin
 	min -= margin
@@ -93,6 +105,9 @@ func PlotSeries(series *[]model.SamplePair, ctx *gg.Context, y float64, height f
 	ctx.MoveTo(x_offset, y+height)
 	for idx, data := range *series {
 		percent := PercentageOf(float64(data.Value), min, max, margin)
+		if percent == 0 {
+			continue
+		}
 		ypos := height*(1-percent) + y
 		xpos := float64(idx)*width + x_offset
 		ctx.LineTo(xpos, ypos)
@@ -110,6 +125,9 @@ func PlotSeries(series *[]model.SamplePair, ctx *gg.Context, y float64, height f
 		percent := PercentageOf(float64(data.Value), min, max, margin)
 		ypos := height*(1-percent) + y
 		xpos := float64(idx)*width + x_offset
+		if percent == 0 {
+			continue
+		}
 		if first {
 			first = false
 		} else {

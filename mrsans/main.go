@@ -11,27 +11,27 @@ func main() {
 	log.Info("loading config...")
 	LoadConfig()
 	temp := GetData(QueryTemperature(), v1.Range{
-		Start: time.Now().Add(-time.Hour * 12),
+		Start: time.Now().Add(-time.Hour * 24),
 		End:   time.Now(),
 		Step:  time.Minute,
 	}, context.Background())
 	hum := GetData(QueryHumidity(), v1.Range{
-		Start: time.Now().Add(-time.Hour * 12),
+		Start: time.Now().Add(-time.Hour * 24),
 		End:   time.Now(),
 		Step:  time.Minute,
 	}, context.Background())
 	pa := GetData(QueryPressure(), v1.Range{
-		Start: time.Now().Add(-time.Hour * 12),
+		Start: time.Now().Add(-time.Hour * 24),
 		End:   time.Now(),
 		Step:  time.Minute,
 	}, context.Background())
 	pm25 := GetData(QueryPM25(), v1.Range{
-		Start: time.Now().Add(-time.Hour * 12),
+		Start: time.Now().Add(-time.Hour * 24),
 		End:   time.Now(),
 		Step:  time.Minute,
 	}, context.Background())
 	pm10 := GetData(QueryPM10(), v1.Range{
-		Start: time.Now().Add(-time.Hour * 12),
+		Start: time.Now().Add(-time.Hour * 24),
 		End:   time.Now(),
 		Step:  time.Minute,
 	}, context.Background())
