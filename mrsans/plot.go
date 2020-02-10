@@ -150,11 +150,11 @@ func Plot(temp *[]model.SamplePair, hum *[]model.SamplePair, pa *[]model.SampleP
 	ctx.SetRGB(0, 0, 0)
 	x_offset := PositionXOffset(float64(ctx.Width()))
 	x_offset_right := float64(ctx.Width()) - PositionXOffset(float64(ctx.Width()))
-	if err := ctx.LoadFontFace("/Library/Fonts/Arial Unicode.ttf", 40); err != nil {
+	if err := ctx.LoadFontFace(Config.plot_fontface, 40); err != nil {
 		log.Fatal("failed to load font face: ", err)
 	}
 	ctx.DrawString(fmt.Sprintf("Mr. Sans reporting at %s", time.Now().Format("Mon Jan 2 15:04:05 MST 2006")), x_offset, PositionSeries(0, plot_total, PLOT_HEIGHT)-30)
-	if err := ctx.LoadFontFace("/Library/Fonts/Arial Unicode.ttf", 30); err != nil {
+	if err := ctx.LoadFontFace(Config.plot_fontface, 30); err != nil {
 		log.Fatal("failed to load font face: ", err)
 	}
 	ctx.DrawString("Temperature", x_offset, PositionSeries(0, plot_total, PLOT_HEIGHT))

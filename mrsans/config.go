@@ -13,6 +13,8 @@ var Config struct {
 	telegram_chat_id int64
 	telegram_log_chat_id int64
 	plot_fontface string
+	instant_push bool
+	cron_job string
 }
 
 func LoadConfig() {
@@ -24,7 +26,9 @@ func LoadConfig() {
 	Config.bluesense_url = config.Get("mrsans.bluesense_url").(string)
 	Config.bluesense_job = config.Get("mrsans.bluesense_job").(string)
 	Config.telegram_bot_token = config.Get("mrsans.telegram_bot_token").(string)
-	Config.plot_fontface = config.Get("mrsans.plot_fontface").(string)
 	Config.telegram_chat_id = config.Get("mrsans.telegram_chat_id").(int64)
 	Config.telegram_log_chat_id = config.Get("mrsans.telegram_log_chat_id").(int64)
+	Config.plot_fontface = config.Get("mrsans.plot_fontface").(string)
+	Config.instant_push = config.Get("mrsans.instant_push").(bool)
+	Config.cron_job = config.Get("mrsans.cron_job").(string)
 }

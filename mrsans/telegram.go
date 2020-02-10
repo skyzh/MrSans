@@ -25,7 +25,6 @@ func SensePushMessage(caption string, photo string) {
 
 	_, err = bot.Send(msg)
 
-
 	if err != nil {
 		log.Warn("failed to send message", err)
 	}
@@ -38,9 +37,8 @@ func SensePushLog(message string) {
 	}
 
 	msg := tgbotapi.NewMessage(Config.telegram_log_chat_id, message)
-
+	msg.ParseMode = "markdown"
 	_, err = bot.Send(msg)
-
 
 	if err != nil {
 		log.Warn("failed to send message", err)
