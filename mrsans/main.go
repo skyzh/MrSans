@@ -16,7 +16,7 @@ func GetLatestValue(x *[]model.SamplePair) float64 {
 }
 
 func SenseGenerateMessage(temp *[]model.SamplePair, hum *[]model.SamplePair, pa *[]model.SamplePair, pm25 *[]model.SamplePair, pm10 *[]model.SamplePair) string {
-	return fmt.Sprintf("Mr. Sans Reporting\n"+
+	return fmt.Sprintf("🤖 Mr. Sans Reporting\n"+
 		"%s\n\n"+
 		"*Temperature* %.2f°C\n"+
 		"*Humidity* %.2f%%\n"+
@@ -87,10 +87,13 @@ func main() {
 		log.Fatal("failed to get hostname", err)
 	}
 	SensePushLog(fmt.Sprintf("Mr Sans intialized\n"+
+		"%s\n"+
 		"*host* `%s`\n"+
 		"*bluesense_host* `%s`\n"+
 		"*bluesense_job* `%s`\n"+
-		"*cron_job* `%s`", hostname, Config.bluesense_url, Config.bluesense_job, Config.cron_job))
+		"*cron_job* `%s`",
+		time.Now().Format("Mon Jan 2 15:04:05 MST 2006"),
+		hostname, Config.bluesense_url, Config.bluesense_job, Config.cron_job))
 	if Config.instant_push {
 		ReportOnce()
 	}

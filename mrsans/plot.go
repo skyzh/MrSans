@@ -11,7 +11,7 @@ import (
 
 const PLOT_WIDTH = 2048
 const PLOT_HEIGHT = 2048
-const CONTENT_HEIGHT_PERCENT = 0.8
+const CONTENT_HEIGHT_PERCENT = 0.75
 const CONTENT_WIDTH_PERCENT = 0.85
 const PLOT_FILL_COLOR = "2196F3"
 
@@ -98,6 +98,18 @@ func PlotSeries(series *[]model.SamplePair, ctx *gg.Context, y float64, height f
 		ctx.DrawLine(x_offset, ypos, x_offset_right, ypos)
 		ctx.Stroke()
 	}
+
+	// Hourly
+	{
+		_width := float64(ctx.Width()) * CONTENT_WIDTH_PERCENT / 24
+		for i := 1; i < 24; i++ {
+			_i := float64(i)
+			_j := x_offset + _width * _i
+			ctx.DrawLine(_j, y, _j ,y + height)
+			ctx.Stroke()
+		}
+	}
+
 	ctx.SetDash(1)
 
 	// Fill
@@ -153,7 +165,7 @@ func Plot(temp *[]model.SamplePair, hum *[]model.SamplePair, pa *[]model.SampleP
 	if err := ctx.LoadFontFace(Config.plot_fontface, 40); err != nil {
 		log.Fatal("failed to load font face: ", err)
 	}
-	ctx.DrawString(fmt.Sprintf("Mr. Sans reporting at %s", time.Now().Format("Mon Jan 2 15:04:05 MST 2006")), x_offset, PositionSeries(0, plot_total, PLOT_HEIGHT)-30)
+	ctx.DrawStringAnchored(fmt.Sprintf("Mr. Sans reporting at %s", time.Now().Format("Mon Jan 2 15:04 MST 2006")), x_offset, 50, 0, 0)
 	if err := ctx.LoadFontFace(Config.plot_fontface, 30); err != nil {
 		log.Fatal("failed to load font face: ", err)
 	}
