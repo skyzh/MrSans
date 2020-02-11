@@ -6,7 +6,6 @@ import (
 )
 
 var Config struct {
-	prometheus_url string
 	bluesense_url string
 	bluesense_job string
 	telegram_bot_token string
@@ -23,14 +22,13 @@ func LoadConfig() {
 	if err != nil {
 		log.Fatal("failed to load config: ", err)
 	}
-	Config.prometheus_url = config.Get("mrsans.prometheus_url").(string)
-	Config.bluesense_url = config.Get("mrsans.bluesense_url").(string)
-	Config.bluesense_job = config.Get("mrsans.bluesense_job").(string)
-	Config.telegram_bot_token = config.Get("mrsans.telegram_bot_token").(string)
-	Config.telegram_chat_id = config.Get("mrsans.telegram_chat_id").(int64)
-	Config.telegram_log_chat_id = config.Get("mrsans.telegram_log_chat_id").(int64)
-	Config.plot_fontface = config.Get("mrsans.plot_fontface").(string)
-	Config.instant_push = config.Get("mrsans.instant_push").(bool)
-	Config.site_name = config.Get("mrsans.site_name").(string)
-	Config.prometheus_addr = config.Get("mrsans.prometheus_addr").(string)
+	Config.bluesense_url = config.Get("bluesense.prometheus").(string)
+	Config.bluesense_job = config.Get("bluesense.job").(string)
+	Config.telegram_bot_token = config.Get("telegram.bot_token").(string)
+	Config.telegram_chat_id = config.Get("telegram.chat_id").(int64)
+	Config.telegram_log_chat_id = config.Get("telegram.log_chat_id").(int64)
+	Config.plot_fontface = config.Get("plot.fontface").(string)
+	Config.instant_push = config.Get("bluesense.instant_push").(bool)
+	Config.site_name = config.Get("bluesense.site_name").(string)
+	Config.prometheus_addr = config.Get("exporter.addr").(string)
 }

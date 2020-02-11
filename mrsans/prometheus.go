@@ -7,7 +7,7 @@ import (
 )
 
 func RunPrometheus() {
-	log.Info("setting up prometheus server")
+	log.Infof("setting up prometheus server at %s", Config.prometheus_addr)
 	http.Handle("/metrics", promhttp.Handler())
 	http.ListenAndServe(Config.prometheus_addr, nil)
 }

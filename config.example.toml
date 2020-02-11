@@ -1,11 +1,16 @@
-[mrsans]
-bluesense_url="http://alexchi-raspi.local:9090/"
-prometheus_url="http://alexchi-raspi.local:9090/"
-bluesense_job="bluesense_shanghai_changning"
-telegram_bot_token="test"
-telegram_chat_id=23333333
-telegram_log_chat_id=233333333
-plot_fontface="/Library/Fonts/Arial Unicode.ttf"
+[bluesense]
+prometheus="http://alexchi-raspi.local:9090/"
+job="bluesense_shanghai_changning"
 instant_push=false
 site_name="Changning, Shanghai"
-prometheus_addr=":9400"
+
+[telegram]
+bot_token="test:test"
+chat_id=-10023333333
+log_chat_id=-10023333333
+
+[plot]
+fontface="/Library/Fonts/Arial Unicode.ttf"
+
+[exporter]
+addr=":9400"

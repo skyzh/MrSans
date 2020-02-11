@@ -106,7 +106,6 @@ func PlotSeries(chunkSize time.Duration, chunkOffset time.Duration, series *[]mo
 		xpos := float64(idx)*width + x_offset
 		currentChunk := data.Timestamp.Time().Add(-chunkOffset).Truncate(chunkSize).Add(chunkOffset)
 		if !currentChunk.Equal(lstChunk) || firstChunk {
-			log.Info(currentChunk)
 			if !firstChunk {
 				ctx.DrawLine(xpos, y, xpos, y+height)
 				ctx.Stroke()
