@@ -9,5 +9,5 @@ import (
 func RunPrometheus() {
 	log.Info("setting up prometheus server")
 	http.Handle("/metrics", promhttp.Handler())
-	http.ListenAndServe(":9400", nil)
+	http.ListenAndServe(Config.prometheus_addr, nil)
 }

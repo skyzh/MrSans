@@ -15,6 +15,7 @@ var Config struct {
 	plot_fontface string
 	instant_push bool
 	site_name string
+	prometheus_addr string
 }
 
 func LoadConfig() {
@@ -31,4 +32,5 @@ func LoadConfig() {
 	Config.plot_fontface = config.Get("mrsans.plot_fontface").(string)
 	Config.instant_push = config.Get("mrsans.instant_push").(bool)
 	Config.site_name = config.Get("mrsans.site_name").(string)
+	Config.prometheus_addr = config.Get("mrsans.prometheus_addr").(string)
 }

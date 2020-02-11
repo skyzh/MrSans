@@ -70,7 +70,7 @@ func SenseConvertString(x float64) string {
 	}
 }
 
-func PlotSeries(chunkSize time.Duration, series *[]model.SamplePair, ctx *gg.Context, y float64, height float64) {
+func PlotSeries(chunkSize time.Duration, chunkOffset time.Duration, series *[]model.SamplePair, ctx *gg.Context, y float64, height float64) {
 	width := float64(ctx.Width()) / float64(len(*series)) * CONTENT_WIDTH_PERCENT
 	x_offset := PositionXOffset(float64(ctx.Width()))
 	x_offset_right := float64(ctx.Width()) - x_offset
@@ -100,16 +100,19 @@ func PlotSeries(chunkSize time.Duration, series *[]model.SamplePair, ctx *gg.Con
 	}
 
 	// Chunk
-	lst_chunk := int64(0)
+	firstChunk := true
+	lstChunk := time.Now()
 	for idx, data := range *series {
 		xpos := float64(idx)*width + x_offset
-		current_chunk := data.Timestamp.UnixNano() / chunkSize.Nanoseconds()
-		if current_chunk != lst_chunk {
-			if lst_chunk != 0 {
+		currentChunk := data.Timestamp.Time().Add(-chunkOffset).Truncate(chunkSize).Add(chunkOffset)
+		if !currentChunk.Equal(lstChunk) || firstChunk {
+			log.Info(currentChunk)
+			if !firstChunk {
 				ctx.DrawLine(xpos, y, xpos, y+height)
 				ctx.Stroke()
 			}
-			lst_chunk = current_chunk
+			firstChunk = false
+			lstChunk = currentChunk
 		}
 	}
 
@@ -155,7 +158,7 @@ func PlotSeries(chunkSize time.Duration, series *[]model.SamplePair, ctx *gg.Con
 	}
 }
 
-func Plot(msg string, chunkSize time.Duration, temp *[]model.SamplePair, hum *[]model.SamplePair, pa *[]model.SamplePair, pm25 *[]model.SamplePair, pm10 *[]model.SamplePair, filename string) {
+func Plot(msg string, chunkSize time.Duration, chunkOffset time.Duration, temp *[]model.SamplePair, hum *[]model.SamplePair, pa *[]model.SamplePair, pm25 *[]model.SamplePair, pm10 *[]model.SamplePair, filename string) {
 	plot_total := 5
 	ctx := gg.NewContext(PLOT_WIDTH, PLOT_HEIGHT)
 	ctx.SetHexColor("ffffff")
@@ -184,14 +187,14 @@ func Plot(msg string, chunkSize time.Duration, temp *[]model.SamplePair, hum *[]
 
 	ctx.DrawStringAnchored(start_time.Time().Format("Mon Jan 2 15:04"), x_offset, PLOT_HEIGHT-60, 0, 1)
 	ctx.DrawStringAnchored(end_time.Time().Format("Mon Jan 2 15:04"), x_offset_right, PLOT_HEIGHT-60, 1, 1)
-	ctx.DrawStringAnchored(msg, PLOT_WIDTH / 2, PLOT_HEIGHT-60, 0.5, 1)
+	ctx.DrawStringAnchored(msg, PLOT_WIDTH/2, PLOT_HEIGHT-60, 0.5, 1)
 
 	// Plot Series
-	PlotSeries(chunkSize, temp, ctx, PositionSeries(0, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
-	PlotSeries(chunkSize, hum, ctx, PositionSeries(1, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
-	PlotSeries(chunkSize, pa, ctx, PositionSeries(2, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
-	PlotSeries(chunkSize, pm25, ctx, PositionSeries(3, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
-	PlotSeries(chunkSize, pm10, ctx, PositionSeries(4, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
+	PlotSeries(chunkSize, chunkOffset, temp, ctx, PositionSeries(0, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
+	PlotSeries(chunkSize, chunkOffset, hum, ctx, PositionSeries(1, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
+	PlotSeries(chunkSize, chunkOffset, pa, ctx, PositionSeries(2, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
+	PlotSeries(chunkSize, chunkOffset, pm25, ctx, PositionSeries(3, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
+	PlotSeries(chunkSize, chunkOffset, pm10, ctx, PositionSeries(4, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
 
 	ctx.SavePNG(filename)
 }

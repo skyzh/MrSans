@@ -8,3 +8,4 @@ telegram_log_chat_id=233333333
 plot_fontface="/Library/Fonts/Arial Unicode.ttf"
 instant_push=false
 site_name="Changning, Shanghai"
+prometheus_addr=":9400"
