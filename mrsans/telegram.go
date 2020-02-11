@@ -51,6 +51,7 @@ func SensePushLog(message string) {
 
 	msg := tgbotapi.NewMessage(Config.telegram_log_chat_id, message)
 	msg.ParseMode = "markdown"
+	msg.DisableNotification = true
 	_, err = bot.Send(msg)
 
 	if err != nil {
