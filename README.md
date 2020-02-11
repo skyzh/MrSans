@@ -4,7 +4,7 @@
 
 Mr. Sans is part of the BlueSense project. He is the climate reporter of BlueSense.
 
-He does hourly report in Telegram channel [BlueSense Hourly Report](https://t.me/thebluesense).
+He does hourly report in Telegram channel [Sans loves Monitoring](https://t.me/thebluesense).
 
 ## Related Projects
 
