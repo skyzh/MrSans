@@ -33,6 +33,7 @@ func SenseGenerateMessage(msg string, temp *[]model.SamplePair, hum *[]model.Sam
 }
 
 func ReportHourlyOnce() {
+	t := time.Now()
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	log := log.WithField("job", "hourly report")
@@ -56,9 +57,11 @@ func ReportHourlyOnce() {
 	message := SenseGenerateMessage("#Hourly", &temp, &hum, &pa, &pm25, &pm10)
 	SensePushMessage(message, "out/report_hourly.png")
 	log.Info("> done")
+	hourlyReport.Observe(time.Now().Sub(t).Seconds())
 }
 
 func ReportDailyOnce() {
+	t := time.Now()
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
 	log := log.WithField("job", "daily report")
@@ -78,11 +81,12 @@ func ReportDailyOnce() {
 	log.Info("> plotting...")
 	msg := fmt.Sprintf("Daily @ %s", Config.site_name)
 	_, offset := time.Now().Zone()
-	Plot(msg, time.Hour*24, time.Duration(-offset) * time.Second, &temp, &hum, &pa, &pm25, &pm10, "out/report_daily.png")
+	Plot(msg, time.Hour*24, time.Duration(-offset)*time.Second, &temp, &hum, &pa, &pm25, &pm10, "out/report_daily.png")
 	log.Info("> sending message...")
 	message := SenseGenerateMessage("#Daily", &temp, &hum, &pa, &pm25, &pm10)
 	SensePushMessage(message, "out/report_daily.png")
 	log.Info("> done")
+	dailyReport.Observe(time.Now().Sub(t).Seconds())
 }
 
 func RunCronTask() {

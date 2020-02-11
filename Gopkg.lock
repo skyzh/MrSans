@@ -99,13 +99,14 @@
   version = "v1.6.0"
 
 [[projects]]
-  digest = "1:4cca4ec648e0ef26a6470a364326b6885774ab4df11621456966849ea4fb7ca1"
+  digest = "1:d1f2c97b352928f77a8a5be024e7b67d473fa31a04cceac49004fa19932636dd"
   name = "github.com/prometheus/client_golang"
   packages = [
     "api",
     "api/prometheus/v1",
     "prometheus",
     "prometheus/internal",
+    "prometheus/promauto",
     "prometheus/promhttp",
   ]
   pruneopts = "UT"
@@ -203,6 +204,8 @@
     "github.com/pelletier/go-toml",
     "github.com/prometheus/client_golang/api",
     "github.com/prometheus/client_golang/api/prometheus/v1",
+    "github.com/prometheus/client_golang/prometheus",
+    "github.com/prometheus/client_golang/prometheus/promauto",
     "github.com/prometheus/client_golang/prometheus/promhttp",
     "github.com/prometheus/common/model",
     "github.com/robfig/cron",
