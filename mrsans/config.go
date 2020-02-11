@@ -14,7 +14,7 @@ var Config struct {
 	telegram_log_chat_id int64
 	plot_fontface string
 	instant_push bool
-	cron_job string
+	site_name string
 }
 
 func LoadConfig() {
@@ -30,5 +30,5 @@ func LoadConfig() {
 	Config.telegram_log_chat_id = config.Get("mrsans.telegram_log_chat_id").(int64)
 	Config.plot_fontface = config.Get("mrsans.plot_fontface").(string)
 	Config.instant_push = config.Get("mrsans.instant_push").(bool)
-	Config.cron_job = config.Get("mrsans.cron_job").(string)
+	Config.site_name = config.Get("mrsans.site_name").(string)
 }
