@@ -70,7 +70,7 @@ func SenseConvertString(x float64) string {
 	}
 }
 
-func PlotSeries(series *[]model.SamplePair, ctx *gg.Context, y float64, height float64) {
+func PlotSeries(chunkSize time.Duration, series *[]model.SamplePair, ctx *gg.Context, y float64, height float64) {
 	width := float64(ctx.Width()) / float64(len(*series)) * CONTENT_WIDTH_PERCENT
 	x_offset := PositionXOffset(float64(ctx.Width()))
 	x_offset_right := float64(ctx.Width()) - x_offset
@@ -99,14 +99,17 @@ func PlotSeries(series *[]model.SamplePair, ctx *gg.Context, y float64, height f
 		ctx.Stroke()
 	}
 
-	// Hourly
-	{
-		_width := float64(ctx.Width()) * CONTENT_WIDTH_PERCENT / 24
-		for i := 1; i < 24; i++ {
-			_i := float64(i)
-			_j := x_offset + _width * _i
-			ctx.DrawLine(_j, y, _j ,y + height)
-			ctx.Stroke()
+	// Chunk
+	lst_chunk := int64(0)
+	for idx, data := range *series {
+		xpos := float64(idx)*width + x_offset
+		current_chunk := data.Timestamp.UnixNano() / chunkSize.Nanoseconds()
+		if current_chunk != lst_chunk {
+			if lst_chunk != 0 {
+				ctx.DrawLine(xpos, y, xpos, y+height)
+				ctx.Stroke()
+			}
+			lst_chunk = current_chunk
 		}
 	}
 
@@ -152,7 +155,7 @@ func PlotSeries(series *[]model.SamplePair, ctx *gg.Context, y float64, height f
 	}
 }
 
-func Plot(temp *[]model.SamplePair, hum *[]model.SamplePair, pa *[]model.SamplePair, pm25 *[]model.SamplePair, pm10 *[]model.SamplePair, filename string) {
+func Plot(msg string, chunkSize time.Duration, temp *[]model.SamplePair, hum *[]model.SamplePair, pa *[]model.SamplePair, pm25 *[]model.SamplePair, pm10 *[]model.SamplePair, filename string) {
 	plot_total := 5
 	ctx := gg.NewContext(PLOT_WIDTH, PLOT_HEIGHT)
 	ctx.SetHexColor("ffffff")
@@ -169,24 +172,26 @@ func Plot(temp *[]model.SamplePair, hum *[]model.SamplePair, pa *[]model.SampleP
 	if err := ctx.LoadFontFace(Config.plot_fontface, 30); err != nil {
 		log.Fatal("failed to load font face: ", err)
 	}
+
 	ctx.DrawString("Temperature", x_offset, PositionSeries(0, plot_total, PLOT_HEIGHT))
 	ctx.DrawString("Humidity", x_offset, PositionSeries(1, plot_total, PLOT_HEIGHT))
 	ctx.DrawString("Pressure", x_offset, PositionSeries(2, plot_total, PLOT_HEIGHT))
-	ctx.DrawString("PM 2.5", x_offset, PositionSeries(3, plot_total, PLOT_HEIGHT))
-	ctx.DrawString("PM 10", x_offset, PositionSeries(4, plot_total, PLOT_HEIGHT))
+	ctx.DrawString("PM2.5", x_offset, PositionSeries(3, plot_total, PLOT_HEIGHT))
+	ctx.DrawString("PM10", x_offset, PositionSeries(4, plot_total, PLOT_HEIGHT))
 
 	start_time := (*temp)[0].Timestamp
 	end_time := (*temp)[len(*temp)-1].Timestamp
 
 	ctx.DrawStringAnchored(start_time.Time().Format("Mon Jan 2 15:04"), x_offset, PLOT_HEIGHT-60, 0, 1)
 	ctx.DrawStringAnchored(end_time.Time().Format("Mon Jan 2 15:04"), x_offset_right, PLOT_HEIGHT-60, 1, 1)
+	ctx.DrawStringAnchored(msg, PLOT_WIDTH / 2, PLOT_HEIGHT-60, 0.5, 1)
 
 	// Plot Series
-	PlotSeries(temp, ctx, PositionSeries(0, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
-	PlotSeries(hum, ctx, PositionSeries(1, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
-	PlotSeries(pa, ctx, PositionSeries(2, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
-	PlotSeries(pm25, ctx, PositionSeries(3, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
-	PlotSeries(pm10, ctx, PositionSeries(4, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
+	PlotSeries(chunkSize, temp, ctx, PositionSeries(0, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
+	PlotSeries(chunkSize, hum, ctx, PositionSeries(1, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
+	PlotSeries(chunkSize, pa, ctx, PositionSeries(2, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
+	PlotSeries(chunkSize, pm25, ctx, PositionSeries(3, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
+	PlotSeries(chunkSize, pm10, ctx, PositionSeries(4, plot_total, PLOT_HEIGHT), HeightSeries(plot_total, PLOT_HEIGHT))
 
 	ctx.SavePNG(filename)
 }
