@@ -26,10 +26,12 @@ func InitializeTelegramBot(ctx context.Context) {
 	}
 }
 
-func SensePushMessage(caption string, photo string) {
+func SensePushMessage(caption string, photo string) error {
 	bot, err := tgbotapi.NewBotAPI(Config.telegram_bot_token)
 	if err != nil {
-		log.Fatal("failed to initialize bot API", err)
+		log.Warn("failed to initialize bot API", err)
+		reportFailure.Add(1)
+		return err
 	}
 
 	msg := tgbotapi.NewPhotoUpload(Config.telegram_chat_id, photo)
@@ -40,13 +42,19 @@ func SensePushMessage(caption string, photo string) {
 
 	if err != nil {
 		log.Warn("failed to send message", err)
+		reportFailure.Add(1)
+		return err
 	}
+
+	return nil
 }
 
-func SensePushLog(message string) {
+func SensePushLog(message string) error {
 	bot, err := tgbotapi.NewBotAPI(Config.telegram_bot_token)
 	if err != nil {
-		log.Fatal("failed to initialize bot API", err)
+		log.Warn("failed to initialize bot API", err)
+		reportFailure.Add(1)
+		return err
 	}
 
 	msg := tgbotapi.NewMessage(Config.telegram_log_chat_id, message)
@@ -56,5 +64,9 @@ func SensePushLog(message string) {
 
 	if err != nil {
 		log.Warn("failed to send message", err)
+		reportFailure.Add(1)
+		return err
 	}
+
+	return nil
 }

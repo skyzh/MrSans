@@ -18,6 +18,10 @@ var (
 		Name: "mrsans_daily_report_duration_seconds",
 		Help: "Duration of generating one Mr. Sans daily report",
 	})
+	reportFailure = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "mrsans_telegram_failure_count",
+		Help: "Count of Telegram push failure",
+	})
 )
 
 func RunPrometheus() {

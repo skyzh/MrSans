@@ -10,8 +10,8 @@ import (
 )
 
 type GrafanaAlert struct {
-	State string `json:"state"`
-	Tags map[string]string `json:"tags"`
+	State string            `json:"state"`
+	Tags  map[string]string `json:"tags"`
 }
 
 func RunGrafanaWebhook() {
@@ -32,11 +32,13 @@ func RunGrafanaWebhook() {
 				if k == "mrsans-do" {
 					val := alert.Tags[k]
 					if val == "restart-systemctl" {
-						cmd := exec.Command("systemctl", "restart", "bluesense")
-						err := cmd.Run()
-						if err != nil {
-							log.Warn("failed to run command", err)
-						}
+						go func() {
+							cmd := exec.Command("systemctl", "restart", "bluesense")
+							err := cmd.Run()
+							if err != nil {
+								log.Warn("failed to run command", err)
+							}
+						}()
 					}
 					if val == "reboot" {
 						go func() {
@@ -47,7 +49,13 @@ func RunGrafanaWebhook() {
 							if err != nil {
 								log.Warn("failed to run command reboot", err)
 							}
-						} ()
+						}()
+					}
+					if val == "hourly" {
+						go ReportHourlyOnce()
+					}
+					if val == "daily" {
+						go ReportDailyOnce()
 					}
 				}
 			}
