@@ -13,7 +13,6 @@ var (
 		Name: "mrsans_hourly_report_duration_seconds",
 		Help: "Duration of generating one Mr. Sans hourly report",
 	})
-
 	dailyReport = promauto.NewHistogram(prometheus.HistogramOpts{
 		Name: "mrsans_daily_report_duration_seconds",
 		Help: "Duration of generating one Mr. Sans daily report",
@@ -26,10 +25,14 @@ var (
 		Name: "mrsans_telegram_success_count",
 		Help: "Count of Telegram push success",
 	})
+	checkpoint = promauto.NewHistogram(prometheus.HistogramOpts{
+		Name: "mrsans_checkpoint_seconds",
+		Help: "Duration of checkpoint task",
+	})
 )
 
 func RunPrometheus() {
 	log.Infof("setting up prometheus server at %s", Config.prometheus_addr)
 	http.Handle("/metrics", promhttp.Handler())
-	http.ListenAndServe(Config.prometheus_addr, nil)
+	log.Fatal(http.ListenAndServe(Config.prometheus_addr, nil))
 }

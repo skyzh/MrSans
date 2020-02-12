@@ -41,7 +41,7 @@ func DoMinuteCheckpoint(ctx context.Context, client *db.Client) error {
 	timeTruncate := time.Minute
 	fromTime := int64(0)
 	if len(results) == 0 {
-		t, _ := time.Parse(time.RFC822, "01 Jan 20 00:00 CST")
+		t, _ := time.Parse(time.RFC822, "12 Feb 20 20:00 CST")
 		fromTime = t.Unix()
 		log.Warnf("no checkpoint record in database, using %v as initial", t)
 	} else {
@@ -62,9 +62,10 @@ func DoMinuteCheckpoint(ctx context.Context, client *db.Client) error {
 		fromT := time.Unix(fromTime, 0).Truncate(timeTruncate)
 		endT := checkpointNow.Truncate(timeTruncate)
 
-		if fromT.Equal(endT) {
+		if fromT.Equal(endT) || fromT.After(endT) {
 			break
 		}
+
 		if t := fromT.Add(time.Hour); t.Before(endT) {
 			endT = t
 		}
@@ -84,7 +85,7 @@ func DoMinuteCheckpoint(ctx context.Context, client *db.Client) error {
 		length := len(temp)
 
 		if length != 0 {
-			log.Infof("checkpoint %s~%s", fromT.Format(time.RFC3339), endT.Format(time.RFC3339))
+			log.Infof("checkpoint %s ~ %s (not included)", fromT.Format(time.RFC3339), endT.Format(time.RFC3339))
 		}
 
 		for idx := 0; idx < length; idx++ {
@@ -135,10 +136,14 @@ func DoMinuteCheckpoint(ctx context.Context, client *db.Client) error {
 
 func DoCheckpoint(ctx context.Context, client *db.Client) error {
 	log := log.WithField("job", "checkpoint job")
+	t := time.Now()
+
 	if err := DoMinuteCheckpoint(ctx, client); err != nil {
 		log.Warnf("error while checkpoint minute")
 		return err
 	}
+
+	checkpoint.Observe(time.Now().Sub(t).Seconds())
 	return nil
 }
 

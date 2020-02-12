@@ -1,23 +1,24 @@
 [bluesense]
-prometheus="http://alexchi-raspi.local:9090/"
-job="bluesense_shanghai_changning"
-instant_push=false
-site_name="Changning, Shanghai"
+prometheus="http://alexchi-raspi.local:9090/"   # Prometheus URL storing BlueSense data
+job="bluesense_shanghai_changning"              # Job name in prometheus
+instant_push=false                              # Don't wait for cron job, report instantly on starting
+site_name="Changning, Shanghai"                 # Full site name (used in report)
 
 [telegram]
-bot_token="test:test"
-chat_id=-10023333333
-log_chat_id=-10023333333
+bot_token="test:test"                           # Telegram bot API token
+# You may set Chat ID to an invalid value so as to disable reporting or logging
+chat_id=-10023333333                            # Chat ID for report channel
+log_chat_id=-10023333333                        # Chat ID for logging
 
 [plot]
-fontface="/Library/Fonts/Arial Unicode.ttf"
+fontface="/Library/Fonts/Arial Unicode.ttf"     # Fontface used when plotting
 
 [exporter]
-addr=":9400"
+addr=":9400"                                    # Prometheus exporter listen address of Mr. Sans
 
 [grafana]
-webhook="127.0.0.1:9401"
+webhook="127.0.0.1:9401"                        # Grafana webhook listen address
 
 [checkpoint]
-firebase="https://some-app.firebaseio.com/"
-base="changning"
+firebase="https://some-app.firebaseio.com/"     # Firebase URL
+base="changning"                                # Site name identifier in Firebase
