@@ -168,11 +168,11 @@ func Plot(msg string, chunkSize time.Duration, chunkOffset time.Duration, temp *
 	x_offset := PositionXOffset(float64(ctx.Width()))
 	x_offset_right := float64(ctx.Width()) - PositionXOffset(float64(ctx.Width()))
 	if err := ctx.LoadFontFace(Config.plot_fontface, 40); err != nil {
-		log.Fatal("failed to load font face: ", err)
+		log.Fatalf("failed to load font face: %v", err)
 	}
 	ctx.DrawStringAnchored(fmt.Sprintf("Mr. Sans reporting at %s", time.Now().Format("Mon Jan 2 15:04 MST 2006")), x_offset, 50, 0, 0)
 	if err := ctx.LoadFontFace(Config.plot_fontface, 30); err != nil {
-		log.Fatal("failed to load font face: ", err)
+		log.Fatalf("failed to load font face: %v", err)
 	}
 
 	ctx.DrawString("Temperature", x_offset, PositionSeries(0, plot_total, PLOT_HEIGHT))

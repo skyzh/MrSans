@@ -7,6 +7,7 @@ import (
 	"github.com/prometheus/client_golang/api/prometheus/v1"
 	"github.com/prometheus/common/model"
 	log "github.com/sirupsen/logrus"
+	"time"
 )
 
 func GetSenseClient() v1.API {
@@ -16,7 +17,7 @@ func GetSenseClient() v1.API {
 	}
 	client, err := api.NewClient(cfg)
 	if err != nil {
-		log.Fatal("failed to create prometheus api client: ", err)
+		log.Fatalf("failed to create prometheus api client: %v", err)
 	}
 	return v1.NewAPI(client)
 }
@@ -45,24 +46,51 @@ func QueryPM25() string {
 	return QueryBlueSense("pm25")
 }
 
+func Count(query string) string {
+	return fmt.Sprintf("count_over_time(%s[1y])", query)
+}
 
-func GetData(query string, r v1.Range, ctx context.Context) [] model.SamplePair {
+func GetRange(query string, r v1.Range, ctx context.Context) [] model.SamplePair {
 	v1api := GetSenseClient()
 
 	result, warnings, err := v1api.QueryRange(ctx, query, r)
 	if err != nil {
-		log.Fatal("failed to query data: ", err)
+		log.Fatalf("failed to query data: %v", err)
 	}
 	if warnings != nil {
-		log.Warn("query warning: ", warnings)
+		log.Warnf("query warning: %v", warnings)
 	}
 	mat, ok := result.(model.Matrix)
 	if !ok {
 		log.Fatal("failed to cast data")
 	}
-	if mat.Len() != 1 {
-		log.Fatal("more than 1 query result")
+	if mat.Len() > 1 {
+		log.Fatalf("more than 1 query result")
+	}
+	if mat.Len() == 0 {
+		log.Warn("no result")
+		return make([] model.SamplePair, 0)
 	}
 	values := mat[0].Values
 	return values
+}
+
+func GetData(query string, atTime time.Time, ctx context.Context) *model.Sample {
+	v1api := GetSenseClient()
+
+	result, warnings, err := v1api.Query(ctx, query, atTime)
+	if err != nil {
+		log.Fatalf("failed to query data: %v", err)
+	}
+	if warnings != nil {
+		log.Warnf("query warning: %v", warnings)
+	}
+	vec, ok := result.(model.Vector)
+	if !ok {
+		log.Fatal("failed to cast data")
+	}
+	if vec.Len() != 1 {
+		log.Fatal("more than 1 query result")
+	}
+	return vec[0]
 }

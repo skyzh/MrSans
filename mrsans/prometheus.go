@@ -22,6 +22,10 @@ var (
 		Name: "mrsans_telegram_failure_count",
 		Help: "Count of Telegram push failure",
 	})
+	reportSuccess = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "mrsans_telegram_success_count",
+		Help: "Count of Telegram push success",
+	})
 )
 
 func RunPrometheus() {

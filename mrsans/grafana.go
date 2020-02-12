@@ -22,7 +22,7 @@ func RunGrafanaWebhook() {
 		err := json.NewDecoder(r.Body).Decode(&alert)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
-			log.Warn("failed to handle webhook", err)
+			log.Warnf("failed to handle webhook: %v", err)
 			return
 		}
 
@@ -36,18 +36,18 @@ func RunGrafanaWebhook() {
 							cmd := exec.Command("systemctl", "restart", "bluesense")
 							err := cmd.Run()
 							if err != nil {
-								log.Warn("failed to run command", err)
+								log.Warnf("failed to run command: %v", err)
 							}
 						}()
 					}
 					if val == "reboot" {
 						go func() {
-							log.Warn("restart after 5 seconds...", err)
+							log.Warn("restart after 5 seconds...")
 							time.Sleep(time.Second * 5)
 							cmd := exec.Command("reboot")
 							err := cmd.Run()
 							if err != nil {
-								log.Warn("failed to run command reboot", err)
+								log.Warnf("failed to run command reboot: %v", err)
 							}
 						}()
 					}

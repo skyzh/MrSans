@@ -17,3 +17,7 @@ addr=":9400"
 
 [grafana]
 webhook="127.0.0.1:9401"
+
+[checkpoint]
+firebase="https://some-app.firebaseio.com/"
+base="changning"

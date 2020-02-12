@@ -6,22 +6,24 @@ import (
 )
 
 var Config struct {
-	bluesense_url string
-	bluesense_job string
-	telegram_bot_token string
-	telegram_chat_id int64
+	bluesense_url        string
+	bluesense_job        string
+	telegram_bot_token   string
+	telegram_chat_id     int64
 	telegram_log_chat_id int64
-	plot_fontface string
-	instant_push bool
-	site_name string
-	prometheus_addr string
-	grafana_addr string
+	plot_fontface        string
+	instant_push         bool
+	site_name            string
+	prometheus_addr      string
+	grafana_addr         string
+	firebase_url         string
+	checkpoint_base      string
 }
 
 func LoadConfig() {
 	config, err := toml.LoadFile("config.toml")
 	if err != nil {
-		log.Fatal("failed to load config: ", err)
+		log.Fatalf("failed to load config: %v", err)
 	}
 	Config.bluesense_url = config.Get("bluesense.prometheus").(string)
 	Config.bluesense_job = config.Get("bluesense.job").(string)
@@ -33,4 +35,6 @@ func LoadConfig() {
 	Config.site_name = config.Get("bluesense.site_name").(string)
 	Config.prometheus_addr = config.Get("exporter.addr").(string)
 	Config.grafana_addr = config.Get("grafana.webhook").(string)
+	Config.firebase_url = config.Get("checkpoint.firebase").(string)
+	Config.checkpoint_base = config.Get("checkpoint.base").(string)
 }
