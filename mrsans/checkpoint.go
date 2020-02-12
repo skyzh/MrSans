@@ -69,8 +69,6 @@ func DoMinuteCheckpoint(ctx context.Context, client *db.Client) error {
 			endT = t
 		}
 
-		log.Infof("checkpoint %s~%s", fromT.Format(time.RFC3339), endT.Format(time.RFC3339))
-
 		r := v1.Range{
 			Start: fromT,
 			End:   endT,
@@ -84,6 +82,10 @@ func DoMinuteCheckpoint(ctx context.Context, client *db.Client) error {
 		pm10 := GetRange(QueryPM10(), r, ctx)
 
 		length := len(temp)
+
+		if length != 0 {
+			log.Infof("checkpoint %s~%s", fromT.Format(time.RFC3339), endT.Format(time.RFC3339))
+		}
 
 		for idx := 0; idx < length; idx++ {
 			atTime := temp[idx].Timestamp.Time().Truncate(timeTruncate)

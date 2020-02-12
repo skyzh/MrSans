@@ -68,7 +68,6 @@ func GetRange(query string, r v1.Range, ctx context.Context) [] model.SamplePair
 		log.Fatalf("more than 1 query result")
 	}
 	if mat.Len() == 0 {
-		log.Warn("no result")
 		return make([] model.SamplePair, 0)
 	}
 	values := mat[0].Values
