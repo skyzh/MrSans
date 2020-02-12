@@ -15,6 +15,7 @@ var Config struct {
 	instant_push bool
 	site_name string
 	prometheus_addr string
+	grafana_addr string
 }
 
 func LoadConfig() {
@@ -31,4 +32,5 @@ func LoadConfig() {
 	Config.instant_push = config.Get("bluesense.instant_push").(bool)
 	Config.site_name = config.Get("bluesense.site_name").(string)
 	Config.prometheus_addr = config.Get("exporter.addr").(string)
+	Config.grafana_addr = config.Get("grafana.webhook").(string)
 }

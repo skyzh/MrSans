@@ -125,6 +125,7 @@ func main() {
 		log.Fatal("failed to get hostname", err)
 	}
 	go RunPrometheus()
+	go RunGrafanaWebhook()
 	go SensePushLog(fmt.Sprintf("Mr Sans intialized\n"+
 		"%s\n"+
 		"*host* `%s`\n"+
