@@ -175,11 +175,11 @@ func Plot(msg string, chunkSize time.Duration, chunkOffset time.Duration, temp *
 		log.Fatalf("failed to load font face: %v", err)
 	}
 
-	ctx.DrawString("Temperature", x_offset, PositionSeries(0, plot_total, PLOT_HEIGHT))
-	ctx.DrawString("Humidity", x_offset, PositionSeries(1, plot_total, PLOT_HEIGHT))
-	ctx.DrawString("Pressure", x_offset, PositionSeries(2, plot_total, PLOT_HEIGHT))
-	ctx.DrawString("PM2.5", x_offset, PositionSeries(3, plot_total, PLOT_HEIGHT))
-	ctx.DrawString("PM10", x_offset, PositionSeries(4, plot_total, PLOT_HEIGHT))
+	ctx.DrawString("Temperature  °C", x_offset, PositionSeries(0, plot_total, PLOT_HEIGHT))
+	ctx.DrawString("Humidity  %", x_offset, PositionSeries(1, plot_total, PLOT_HEIGHT))
+	ctx.DrawString("Pressure  kPa", x_offset, PositionSeries(2, plot_total, PLOT_HEIGHT))
+	ctx.DrawString("PM2.5  µg/m^3", x_offset, PositionSeries(3, plot_total, PLOT_HEIGHT))
+	ctx.DrawString("PM10  µg/m^3", x_offset, PositionSeries(4, plot_total, PLOT_HEIGHT))
 
 	start_time := (*temp)[0].Timestamp
 	end_time := (*temp)[len(*temp)-1].Timestamp
