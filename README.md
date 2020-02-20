@@ -1,3 +1,6 @@
+<p align="center"><img src="https://user-images.githubusercontent.com/4198311/74932238-4912ae80-541c-11ea-92eb-9f9ab40337dd.png" width="50%"></p>
+
+
 # MrSans
 
 [![Build Status](https://travis-ci.com/skyzh/MrSans.svg?branch=master)](https://travis-ci.com/skyzh/MrSans)
@@ -26,9 +29,8 @@ no_proxy="127.0.0.1,localhost"
 
 Mr. Sans reports hourly and daily to the Telegram channel.
 
-![image](https://user-images.githubusercontent.com/4198311/74337523-6374d880-4ddb-11ea-991f-a984d265e649.png)
 
-![image](https://user-images.githubusercontent.com/4198311/74337637-a0d96600-4ddb-11ea-9996-cd95e9175a98.png)
+<img src="https://user-images.githubusercontent.com/4198311/74337523-6374d880-4ddb-11ea-991f-a984d265e649.png" width="48%"><img src="https://user-images.githubusercontent.com/4198311/74337637-a0d96600-4ddb-11ea-9996-cd95e9175a98.png" width="48%">
 
 ### Report Incident
 
