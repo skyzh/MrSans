@@ -170,5 +170,6 @@ func (c *CheckpointService) RunCheckpoint() {
 
 	if err := DoCheckpoint(context.Background(), c.client); err != nil {
 		log.Warnf("error while checkpoint")
+		checkpointFailure.Add(1)
 	}
 }

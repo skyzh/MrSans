@@ -29,27 +29,46 @@ func InitializeTelegramBot(ctx context.Context) {
 
 // SensePushLog pushes message to telegram channel `telegram.chat_id`
 func SensePushMessage(caption string, photo string) error {
-	bot, err := tgbotapi.NewBotAPI(Config.telegram_bot_token)
-	if err != nil {
-		log.Warnf("failed to initialize bot API: %v", err)
-		reportFailure.Add(1)
-		return err
+	pushFunc := func() error {
+		bot, err := tgbotapi.NewBotAPI(Config.telegram_bot_token)
+		if err != nil {
+			log.Warnf("failed to initialize bot API: %v", err)
+			reportFailure.Add(1)
+			return err
+		}
+
+		msg := tgbotapi.NewPhotoUpload(Config.telegram_chat_id, photo)
+		msg.Caption = caption
+		msg.ParseMode = "markdown"
+
+		_, err = bot.Send(msg)
+
+		if err != nil {
+			log.Warnf("failed to send message: %v", err)
+			reportFailure.Add(1)
+			return err
+		}
+
+		reportSuccess.Add(1)
+
+		return nil
 	}
-
-	msg := tgbotapi.NewPhotoUpload(Config.telegram_chat_id, photo)
-	msg.Caption = caption
-	msg.ParseMode = "markdown"
-
-	_, err = bot.Send(msg)
-
-	if err != nil {
-		log.Warnf("failed to send message: %v", err)
-		reportFailure.Add(1)
-		return err
+	i := 0
+	for ; ; {
+		err := pushFunc()
+		if err != nil {
+			secs := (i + 1) * 5
+			log.Warnf("%d attempt failed, retrying sending telegram message after %d seconds", i+1, secs)
+			time.Sleep(time.Second * time.Duration(secs))
+		} else {
+			break
+		}
+		i += 1
+		if i == 15 {
+			log.Warnf("all attempts failed, stop retrying")
+			return err
+		}
 	}
-
-	reportSuccess.Add(1)
-
 	return nil
 }
 

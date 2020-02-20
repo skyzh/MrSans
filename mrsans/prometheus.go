@@ -29,6 +29,10 @@ var (
 		Name: "mrsans_checkpoint_seconds",
 		Help: "Duration of checkpoint task",
 	})
+	checkpointFailure = promauto.NewCounter(prometheus.CounterOpts{
+		Name: "mrsans_checkpoint_failure_count",
+		Help: "Duration of checkpoint failure",
+	})
 )
 
 func RunPrometheus() {
