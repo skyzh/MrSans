@@ -5,7 +5,7 @@
 
 [![Build Status](https://travis-ci.com/skyzh/MrSans.svg?branch=master)](https://travis-ci.com/skyzh/MrSans)
 
-Mr. Sans is part of the BlueSense project. He is the climate reporter of BlueSense.
+Mr. Sans is part of [the BlueSense project](https://github.com/skyzh/BlueSense). He is the climate reporter of BlueSense.
 
 He does hourly report in Telegram channel [Sans loves Monitoring](https://t.me/thebluesense).
 
