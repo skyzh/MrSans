@@ -40,6 +40,15 @@ func RunGrafanaWebhook() {
 							}
 						}()
 					}
+					if val == "restart-ss" {
+						go func() {
+							cmd := exec.Command("systemctl", "restart", "ss-local")
+							err := cmd.Run()
+							if err != nil {
+								log.Warnf("failed to run command: %v", err)
+							}
+						}()
+					}
 					if val == "reboot" {
 						go func() {
 							log.Warn("restart after 5 seconds...")

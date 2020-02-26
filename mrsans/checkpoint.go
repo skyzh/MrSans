@@ -134,9 +134,18 @@ func DoMinuteCheckpoint(ctx context.Context, client *db.Client) error {
 	return nil
 }
 
+func DoMaintenance(ctx context.Context, client *db.Client) error {
+	return nil
+}
+
 func DoCheckpoint(ctx context.Context, client *db.Client) error {
 	log := log.WithField("job", "checkpoint job")
 	t := time.Now()
+
+	if err := DoMaintenance(ctx, client); err != nil {
+		log.Warnf("error while maintenance")
+		return err
+	}
 
 	if err := DoMinuteCheckpoint(ctx, client); err != nil {
 		log.Warnf("error while checkpoint minute")

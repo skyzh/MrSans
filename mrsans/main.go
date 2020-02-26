@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/robfig/cron"
+	cron "github.com/robfig/cron/v3"
 	log "github.com/sirupsen/logrus"
 	"os"
 	"time"
