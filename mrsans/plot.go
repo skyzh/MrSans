@@ -177,7 +177,7 @@ func Plot(msg string, chunkSize time.Duration, chunkOffset time.Duration, temp *
 
 	ctx.DrawString("Temperature  °C", x_offset, PositionSeries(0, plot_total, PLOT_HEIGHT))
 	ctx.DrawString("Humidity  %", x_offset, PositionSeries(1, plot_total, PLOT_HEIGHT))
-	ctx.DrawString("Pressure  kPa", x_offset, PositionSeries(2, plot_total, PLOT_HEIGHT))
+	ctx.DrawString("Pressure  Pa", x_offset, PositionSeries(2, plot_total, PLOT_HEIGHT))
 	ctx.DrawString("PM2.5  µg/m^3", x_offset, PositionSeries(3, plot_total, PLOT_HEIGHT))
 	ctx.DrawString("PM10  µg/m^3", x_offset, PositionSeries(4, plot_total, PLOT_HEIGHT))
 
