@@ -95,19 +95,19 @@ func DoMinuteCheckpoint(ctx context.Context, client *db.Client) error {
 				continue
 			}
 			hum := float64(hum[idx].Value)
-			if math.IsNaN(temp) {
+			if math.IsNaN(hum) {
 				continue
 			}
 			pm25 := float64(pm25[idx].Value)
-			if math.IsNaN(temp) {
+			if math.IsNaN(pm25) {
 				continue
 			}
 			pm10 := float64(pm10[idx].Value)
-			if math.IsNaN(temp) {
+			if math.IsNaN(pm10) {
 				continue
 			}
 			pa := float64(pa[idx].Value)
-			if math.IsNaN(temp) {
+			if math.IsNaN(pa) {
 				continue
 			}
 
